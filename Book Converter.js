@@ -1,19 +1,28 @@
+///Made by Huron, make sure to put those codes inside the console of your browser.
+///Execute this code first
+
+//#region First
 var jQueryScript = document.createElement('script');  
 jQueryScript.setAttribute('src','https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.debug.js');
 document.head.appendChild(jQueryScript);
+//#endregion
 
+///Execute this second code and then after it returns use the function ist()
 
-
+//#region Second
 var myList = new Array();
-var BookId = "9788522126859"; //document.URL.substr(49,13);
-var InitPage = 398381983;
-var MaxPages = 200;
-var MaxResolution = "800";
-//melhorar func
+//as an example thats Calculo 1 book
+var BookId = "9788522126859"; //setup the book ID
+
+//The ID of the first page of the book, it'll be used as reference to get all the pages.
+var InitPage = 398381983; 	  //setup the first page ID
+var MaxPages = 200; 		  //setup the max pages that it will print
+var MaxResolution = "800";    //max resolution of each page
 function httpGet(theUrl)
 {
     var xmlHttp = new XMLHttpRequest();
 	xmlHttp.open( "GET", theUrl, false ); // false for synchronous request
+	//make sure to get your own header for the request, the path here shall have the correct information about the page,and the book
 	xmlHttp.setRequestHeader(
 		"authority", "jigsaw.vitalsource.com",
 		"method", "GET",
@@ -35,7 +44,7 @@ function httpGet(theUrl)
 
 function ist()
 {
-	for(i = 99; i <= MaxPages;i++)
+	for(i = 0; i <= MaxPages;i++)
 	{
 		var FUrl = "https://jigsaw.vitalsource.com/books/" + BookId + "/pages/" + (InitPage + i).toString() + "/content?create=true"
 		var req = httpGet(FUrl);
@@ -87,10 +96,17 @@ function getBase64Image(img) {
 	var dataURL = canvas.toDataURL("image/png");
 	return dataURL;
 }
-
+//#endregion
 	
+//After The ist function registered all the pages you'll have to execute this for 2 times
+//the first one will 99% give errors, but that's "Normal" it'll be just loading the images.
+//then the second one will add to the document
+//make sure your browser has the memory to store all the images that you will load, otherwise you'll have to either lower the resolution
+//or partition the book into small parts and merge them together after.
+
+//#region Third
 var doc = new jsPDF("p", "mm", "a4");
- for (var i = 0; i < 100; i++) {
+ for (var i = 0; i < MaxPages; i++) {
 	(function(i) {
 			setTimeout(function() 
 			{ 
@@ -100,16 +116,22 @@ var doc = new jsPDF("p", "mm", "a4");
 				console.log(img);
 				doc.addImage(imgData,'JPEG', 0, 0, 210,297);
 				doc.addPage();
-				console.log("Lendo pagina: " + i);
+				console.log("Reading Page: " + i);
 			}, 500 * i);
 	})(i);
 }
-doc.save('calculo1_parte 1.pdf');
+//#endregion
+
+//final step
+//#region Final
+doc.save('Ebook.pdf');
+//#endregion
 
 
+//If you have any troubles study those pages.
 
+//about the pages ID of the book
+//https://jigsaw.vitalsource.com/books/9788522126859/pages/398382020/content?create=true#cfi=/37!/4/2@100:0.00
 
-https://jigsaw.vitalsource.com/books/9788522126859/pages/398382020/content?create=true#cfi=/37!/4/2@100:0.00
-https://jigsaw.vitalsource.com/books/9788522126859/cfi/37!/4/4@0.00:0.00?jigsaw_brand=integradaminhabiblioteca&xdm_e=https%3A%2F%2Fintegrada.minhabiblioteca.com.br&xdm_c=default134&xdm_p=1
-
-//necessário para urls
+//about the book ID
+//https://jigsaw.vitalsource.com/books/9788522126859/cfi/37!/4/4@0.00:0.00?jigsaw_brand=integradaminhabiblioteca&xdm_e=https%3A%2F%2Fintegrada.minhabiblioteca.com.br&xdm_c=default134&xdm_p=1
